@@ -114,7 +114,7 @@ VALUES
  'Ilala, Dar es Salaam',
  '2026-10-19'),
 
-(3, 'Children’s Learning Support',
+(3, 'Children''s Learning Support',
  'Volunteer with children by helping them with reading, homework, and educational activities.',
  'Temeke, Dar es Salaam',
  '2026-10-26'),
