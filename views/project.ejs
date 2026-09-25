@@ -1,0 +1,22 @@
+<%- include('partials/header') %>
+<main id="main-content" class="container page-content">
+	<div class="page-intro">
+		<p class="eyebrow">Service project</p>
+		<h1><%= project.title %></h1>
+		<p class="lead"><%= project.description %></p>
+	</div>
+
+	<article class="info-card">
+		<p><strong>Date:</strong> <%= project.date.toISOString().slice(0, 10) %></p>
+		<p><strong>Location:</strong> <%= project.location %></p>
+		<p><strong>Organization:</strong> <a href="/organization/<%= project.organization_id %>"><%= project.organization_name %></a></p>
+		<% if (categories.length) { %>
+			<p><strong>Categories:</strong>
+				<% categories.forEach((category, index) => { %>
+					<a href="/category/<%= category.category_id %>"><%= category.name %></a><%= index < categories.length - 1 ? ', ' : '' %>
+				<% }) %>
+			</p>
+		<% } %>
+	</article>
+</main>
+<%- include('partials/footer') %>
