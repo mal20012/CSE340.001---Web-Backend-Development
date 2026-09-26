@@ -15,6 +15,8 @@ import {
 	getProjectDetails
 } from './src/models/projects.js'
 import categoryRoute from './src/routes/category-route.js'
+import organizationRoute from './src/routes/organization-route.js'
+import router from './src/routes/routes.js'
 
 const app = express()
 const __filename = fileURLToPath(import.meta.url)
@@ -42,86 +44,8 @@ app.use((req, res, next) => {
 
 app.use(express.static(path.join(projectRoot, 'public')))
 app.use('/category', categoryRoute)
-
-app.get('/', (req, res) => { res.render('index', { title: 'Home' }) })
-app.get('/organizations', async (req, res) => {
-	const organizations = await getAllOrganizations()
-
-	const title = 'Our Partner Organizations'
-	res.render('organizations', { title, organizations })
-})
-app.get('/organization/:id', async (req, res, next) => {
-	try {
-		const organizationId = Number.parseInt(req.params.id, 10)
-		if (!Number.isInteger(organizationId) || organizationId < 1) {
-			const err = new Error('Organization Not Found')
-			err.status = 404
-			return next(err)
-		}
-
-		const [organization, projects] = await Promise.all([
-			getOrganizationById(organizationId),
-			getProjectsByOrganizationId(organizationId)
-		])
-
-		if (!organization) {
-			const err = new Error('Organization Not Found')
-			err.status = 404
-			return next(err)
-		}
-
-		res.render('organization', {
-			title: organization.name,
-			organization,
-			projects
-		})
-	} catch (error) {
-		next(error)
-	}
-})
-app.get('/projects', async (req, res) => {
-	const projects = await getUpcomingProjects(5)
-
-	const title = 'Upcoming Service Projects'
-	res.render('projects', { title, projects })
-})
-app.get('/project/:id', async (req, res, next) => {
-	try {
-		const projectId = Number.parseInt(req.params.id, 10)
-		if (!Number.isInteger(projectId) || projectId < 1) {
-			const err = new Error('Project Not Found')
-			err.status = 404
-			return next(err)
-		}
-
-		const [project, categories] = await Promise.all([
-			getProjectDetails(projectId),
-			getCategoriesByProjectId(projectId)
-		])
-		if (!project) {
-			const err = new Error('Project Not Found')
-			err.status = 404
-			return next(err)
-		}
-
-		res.render('project', { title: project.title, project, categories })
-	} catch (error) {
-		next(error)
-	}
-})
-app.get('/categories', async (req, res) => {
-	const categories = await getAllCategories()
-
-	const title = 'Service Project Categories'
-	res.render('categories', { title, categories })
-})
-
-// Test route for 500 errors
-app.get('/test-error', (req, res, next) => {
-	const err = new Error('This is a test error')
-	err.status = 500
-	next(err)
-})
+app.use('/organization', organizationRoute)
+app.use(router)
 
 // Catch-all route for 404 errors
 app.use((req, res, next) => {
