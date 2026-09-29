@@ -6,6 +6,7 @@
 		<img class="organization-logo" src="/images/<%= organization.logo_filename %>" alt="<%= organization.name %> logo">
 		<p class="lead"><%= organization.description %></p>
 		<p><a href="mailto:<%= organization.contact_email %>"><%= organization.contact_email %></a></p>
+		<a class="button" href="/edit-organization/<%= organization.organization_id %>">Edit Organization</a>
 	</div>
 
 	<section aria-labelledby="projects-heading">
