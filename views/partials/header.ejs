@@ -16,3 +16,14 @@
     <a class="brand" href="/" aria-label="Service Project Hub home"><img class="brand-logo" src="/images/cse340-service-network.png" alt="CSE340 Service Network logo"><span>Service Project Hub</span></a>
     <nav aria-label="Main navigation"><ul class="nav-list"><li><a href="/">Home</a></li><li><a href="/organizations">Organizations</a></li><li><a href="/projects">Projects</a></li><li><a href="/categories">Categories</a></li></ul></nav>
   </div></header>
+  <% const successMessages = flash('success') || []; const errorMessages = flash('error') || []; %>
+  <% if (successMessages.length || errorMessages.length) { %>
+    <div class="flash-container">
+      <% successMessages.forEach((message) => { %>
+        <div class="flash-message success"><%= message %></div>
+      <% }) %>
+      <% errorMessages.forEach((message) => { %>
+        <div class="flash-message error"><%= message %></div>
+      <% }) %>
+    </div>
+  <% } %>

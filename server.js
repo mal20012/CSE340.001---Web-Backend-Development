@@ -1,22 +1,13 @@
 import 'dotenv/config'
 import express from 'express'
+import session from 'express-session'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { testConnection } from './src/models/db.js';
-import { getAllOrganizations, getOrganizationById } from './src/models/organizations.js';
-// ...existing code...
-import {
-    getAllCategories,
-    getCategoriesByProjectId
-} from './src/models/categories.js'
-import {
-	getProjectsByOrganizationId,
-	getUpcomingProjects,
-	getProjectDetails
-} from './src/models/projects.js'
 import categoryRoute from './src/routes/category-route.js'
 import organizationRoute from './src/routes/organization-route.js'
 import router from './src/routes/routes.js'
+import flashMiddleware from './src/middleware/flash.js'
 
 const app = express()
 const __filename = fileURLToPath(import.meta.url)
@@ -24,9 +15,19 @@ const __dirname = path.dirname(__filename)
 const projectRoot = __dirname
 const PORT = process.env.PORT || 3000
 const NODE_ENV = process.env.NODE_ENV || 'development'
+const SESSION_SECRET = process.env.SESSION_SECRET || 'development-secret'
 
 app.set('view engine', 'ejs')
 app.set('views', path.join(projectRoot, 'views'))
+
+app.use(express.urlencoded({ extended: true }))
+app.use(session({
+	secret: SESSION_SECRET,
+	resave: false,
+	saveUninitialized: false,
+	cookie: { secure: false }
+}))
+app.use(flashMiddleware)
 
 // Middleware to log all incoming requests
 app.use((req, res, next) => {
