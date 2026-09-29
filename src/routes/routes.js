@@ -2,8 +2,12 @@ import express from 'express'
 import { getAllOrganizations } from '../models/organizations.js'
 import { getAllCategories } from '../models/categories.js'
 import { getProjectsPage, getProjectDetailsPage } from '../controllers/project-controller.js'
-import { getOrganizationDetails } from '../controllers/organization-controller.js'
-import db from '../models/db.js'
+import {
+	getOrganizationDetails,
+	organizationValidation,
+	showNewOrganizationForm,
+	processNewOrganizationForm
+} from '../controllers/organization-controller.js'
 
 const router = express.Router()
 
@@ -23,28 +27,8 @@ router.get('/organizations', async (req, res, next) => {
 	}
 })
 
-router.get('/organizations/new', (req, res) => {
-	res.render('new-organization', { title: 'Create New Organization' })
-})
-
-router.post('/organizations', async (req, res, next) => {
-	try {
-		const { name, description, contact_email, logo_filename } = req.body
-
-		const result = await db.query(
-			`INSERT INTO public.organization (name, description, contact_email, logo_filename)
-			 VALUES ($1, $2, $3, $4)
-			 RETURNING organization_id;`,
-			[name, description, contact_email, logo_filename || 'placeholder-logo.png']
-		)
-
-		const organizationId = result.rows[0].organization_id
-		req.flash('success', 'Organization created successfully.')
-		res.redirect(`/organization/${organizationId}`)
-	} catch (error) {
-		next(error)
-	}
-})
+router.get('/organizations/new', showNewOrganizationForm)
+router.post('/organizations', organizationValidation, processNewOrganizationForm)
 
 router.get('/organization/:id', getOrganizationDetails)
 
