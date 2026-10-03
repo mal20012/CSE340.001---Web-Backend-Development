@@ -27,12 +27,20 @@ import {
 	showAssignCategoriesForm,
 	processAssignCategoriesForm
 } from '../controllers/category-controller.js'
+import {
+	registrationValidation,
+	showUserRegistrationForm,
+	processUserRegistrationForm
+} from '../controllers/users.js'
 
 const router = express.Router()
 
 router.get('/', (req, res) => {
 	res.render('index', { title: 'Home' })
 })
+
+router.get('/register', showUserRegistrationForm)
+router.post('/register', registrationValidation, processUserRegistrationForm)
 
 router.get('/organizations', async (req, res, next) => {
 	try {
