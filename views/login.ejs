@@ -1,0 +1,20 @@
+<%- include('partials/header') %>
+<main id="main-content" class="container page-content">
+	<div class="page-intro">
+		<p class="eyebrow">Welcome back</p>
+		<h1><%= title %></h1>
+	</div>
+
+	<form class="info-card" method="POST" action="/login">
+		<div class="form-group">
+			<label for="email">Email</label>
+			<input id="email" name="email" type="email" maxlength="100" autocomplete="email" required>
+		</div>
+		<div class="form-group">
+			<label for="password">Password</label>
+			<input id="password" name="password" type="password" autocomplete="current-password" required>
+		</div>
+		<button class="button" type="submit">Log in</button>
+	</form>
+</main>
+<%- include('partials/footer') %>

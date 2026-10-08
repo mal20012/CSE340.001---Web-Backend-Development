@@ -20,10 +20,7 @@ const organizationValidation = [
 		.notEmpty().withMessage('Contact email is required.')
 		.bail()
 		.isEmail().withMessage('Enter a valid email address.')
-		.normalizeEmail(),
-	body('logo_filename')
-		.trim()
-		.customSanitizer(value => value || 'placeholder-logo.png')
+		.normalizeEmail()
 ]
 
 const showNewOrganizationForm = (req, res) => {
@@ -38,12 +35,11 @@ const processNewOrganizationForm = async(req, res, next) => {
 	}
 
 	try {
-		const { name, description, contact_email, logo_filename } = req.body
+		const { name, description, contact_email } = req.body
 		const organization = await createOrganization(
 			name,
 			description,
-			contact_email,
-			logo_filename
+			contact_email
 		)
 
 		req.flash('success', 'Organization created successfully.')

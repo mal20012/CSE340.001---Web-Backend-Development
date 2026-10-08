@@ -30,7 +30,13 @@ import {
 import {
 	registrationValidation,
 	showUserRegistrationForm,
-	processUserRegistrationForm
+	processUserRegistrationForm,
+	loginValidation,
+	showLoginForm,
+	processLoginForm,
+	processLogout,
+	requireLogin,
+	showDashboard
 } from '../controllers/users.js'
 
 const router = express.Router()
@@ -41,6 +47,10 @@ router.get('/', (req, res) => {
 
 router.get('/register', showUserRegistrationForm)
 router.post('/register', registrationValidation, processUserRegistrationForm)
+router.get('/login', showLoginForm)
+router.post('/login', loginValidation, processLoginForm)
+router.get('/logout', processLogout)
+router.get('/dashboard', requireLogin, showDashboard)
 
 router.get('/organizations', async (req, res, next) => {
 	try {

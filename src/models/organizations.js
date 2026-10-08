@@ -1,5 +1,7 @@
 import db from './db.js'
 
+const DEFAULT_ORGANIZATION_LOGO = 'placeholder-logo.png'
+
 const getAllOrganizations = async() => {
 	const query = `
 		SELECT organization_id, name, description, contact_email, logo_filename
@@ -23,12 +25,12 @@ const getOrganizationById = async(organizationId) => {
 	return result.rows[0]
 }
 
-const createOrganization = async(name, description, contactEmail, logoFilename) => {
+const createOrganization = async(name, description, contactEmail) => {
 	const result = await db.query(`
 		INSERT INTO public.organization (name, description, contact_email, logo_filename)
 		VALUES ($1, $2, $3, $4)
 		RETURNING organization_id;
-	`, [name, description, contactEmail, logoFilename])
+	`, [name, description, contactEmail, DEFAULT_ORGANIZATION_LOGO])
 
 	return result.rows[0]
 }
